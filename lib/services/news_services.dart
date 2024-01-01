@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:news/models/article_model.dart';
 
@@ -24,8 +26,13 @@ class NewsService {
       }
 
       return articlesList;
+    }on DioException catch (e) {
+      final String errorMessage = e.response?.data['error']['message']
+      ?? 'oops there was an error , try later';
+      throw Exception(errorMessage);
     } catch (e) {
-      return [];
+      log(e.toString());
+      throw Exception('oops there was an error , try later');
     }
   }
 }
